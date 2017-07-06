@@ -27,6 +27,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+//    @Autowired
+//    private AccessDeniedHandler accessDeniedHandler;
+
     @Autowired
     private DataSource dataSource;
 
@@ -47,16 +50,43 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
+    // roles admin allow to access /admin/**
+    // roles user allow to access /user/**
+    // custom 403 access denied handler
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                    .antMatchers("/", "/home", "/about").permitAll()
+//                    .antMatchers("/login", "/register").permitAll()
+//                    .antMatchers("/admin/**").hasAnyRole("ADMIN")
+//                    .antMatchers("/user/**").hasAnyRole("USER")
+//                    .anyRequest().authenticated()
+//                .and()
+//                    .formLogin()
+//                    .loginPage("/login")
+//                    .permitAll()
+//                .and()
+//                    .logout()
+//                    .permitAll()
+//                .and()
+//                    .exceptionHandling()
+//                    .accessDeniedHandler(accessDeniedHandler);
+//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.
                 authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/registration").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
-                .authenticated().and().csrf().disable().formLogin()
+                    .antMatchers("/", "/home", "/about").permitAll()
+                    .antMatchers("/login").permitAll()
+                    .antMatchers("/register").permitAll()
+                    .antMatchers("/user/**").hasAuthority("USER")
+                    .antMatchers("/admin/**").hasAuthority("ADMIN")
+                    .anyRequest().authenticated()
+                .and().csrf().disable().formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
                 .defaultSuccessUrl("/admin/home")
                 .usernameParameter("email")
@@ -64,7 +94,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").and().exceptionHandling()
-                .accessDeniedPage("/access-denied");
+                .accessDeniedPage("/error/403");
+//                .accessDeniedPage("/access-denied");
     }
 
     @Override
@@ -73,5 +104,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }
+
+    // create two users, admin and user
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password("password").roles("USER")
+//                .and()
+//                .withUser("admin").password("password").roles("ADMIN");
+//    }
 
 }
