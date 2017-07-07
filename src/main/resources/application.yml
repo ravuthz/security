@@ -1,19 +1,21 @@
-server:
-    port: 8080
 spring:
+    profiles.active: development
+
+---
+# development profile
+spring:
+    profiles: development
     datasource:
         data: classpath:init_data.sql
         driver-class-name: org.postgresql.Driver
         password: postgres
         url: jdbc:postgresql://localhost:5432/postgres
         username: postgres
-
 #    datasource:
 #        driver-class-name: org.h2.Driver
 #        password:
 #        url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
 #        username: sa
-
         testWhileIdle: true
         validationQuery: SELECT 1
     jpa:
@@ -29,5 +31,43 @@ spring:
     queries:
         roles-query: select u.email, r.role from users u inner join user_role ur on(u.user_id=ur.user_id) inner join roles r on(ur.role_id=r.role_id) where u.email=?
         users-query: select email, password, active from users u where email=?
-    thymeleaf:
+
+    mustache:
         cache: false
+        charset: UTF-8
+
+logging:
+    file: logs/development.log
+    pattern:
+        console: "%clr(%d{HH:mm:ss}){magenta} %clr(%-5level - %logger{15} %msg%n)"
+#        console: "%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n"
+#        console: "%d{yyyy-MM-dd HH:mm:ss} %-3level - %msg%n"
+#        console: "%d %-5level %logger : %msg%n"
+#        file: "%d %-5level [%thread] %logger : %msg%n"
+        file: "%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n"
+    level:
+        root: ERROR
+        org:
+            hibernate: INFO
+            springframework:
+                web: INFO
+                security: INFO
+            apache:
+                commons:
+                    dbcp2: INFO
+        com.khmergroup.security.controller: INFO
+server:
+    port: 8080
+
+---
+# production profile
+spring:
+    profiles: production
+logging:
+    file: logs/production.log
+    pattern:
+        file: "%d %-5level [%thread] %logger{0} : %msg%n"
+    level:
+        org.hibernate: WARN
+        org.springframework.web: WARN
+        com.khmergroup.security.controller: WARN
