@@ -6,7 +6,7 @@ spring:
 spring:
     profiles: development
     datasource:
-        data: classpath:init_data.sql
+#        data: classpath:init_data.sql
         driver-class-name: org.postgresql.Driver
         password: postgres
         url: jdbc:postgresql://localhost:5432/postgres
@@ -21,7 +21,7 @@ spring:
     jpa:
         generate-ddl: true
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: update
             naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
         properties:
             hibernate:
@@ -32,7 +32,7 @@ spring:
         roles-query: select u.email, r.role from users u inner join user_role ur on(u.user_id=ur.user_id) inner join roles r on(ur.role_id=r.role_id) where u.email=?
         users-query: select email, password, active from users u where email=?
 
-    mustache:
+    thymeleaf:
         cache: false
         charset: UTF-8
 

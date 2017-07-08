@@ -1,60 +1,66 @@
-{{>layout/header}}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Spring Security Example </title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
 
-<form action="/" method="get">
-    <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Login Page</button>
-</form>
+<div th:replace="fragments/header :: header"/>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <form autocomplete="off" action="#" action="/register" method="post" class="form-horizontal"
-                  role="form">
-                <h2>Registration Form</h2>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <label if="${#fields.hasErrors('firstName')}" errors="*{firstName}"
-                               class="validation-message"></label>
-                        <input type="text" field="*{firstName}" placeholder="Name"
-                               class="form-control"/>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <label if="${#fields.hasErrors('lastName')}" errors="*{lastName}"
-                               class="validation-message"></label>
-                        <input type="text" field="*{lastName}"
-                               placeholder="Last Name" class="form-control"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <input type="text" field="*{email}" placeholder="Email"
-                               class="form-control"/> <label
-                            if="${#fields.hasErrors('email')}" errors="*{email}"
-                            class="validation-message"></label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <input type="password" field="*{password}"
-                               placeholder="Password" class="form-control"/> <label
-                            if="${#fields.hasErrors('password')}" errors="*{password}"
-                            class="validation-message"></label>
-                    </div>
-                </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:action="@{/register}" method="post">
+                <fieldset>
+                    <h1>Please Sign In</h1>
 
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <button type="submit" class="btn btn-primary btn-block">Register User</button>
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            Invalid username and password.
+                        </div>
                     </div>
-                </div>
+                    <div th:if="${param.logout}">
+                        <div class="alert alert-info">
+                            You have been logged out.
+                        </div>
+                    </div>
 
-                <span utext="${successMessage}"></span>
+                    <div class="form-group">
+                        <input type="text" name="first_name" id="first_name" class="form-control input-lg"
+                               placeholder="FirstName" required="true" autofocus="true"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="last_name" id="last_name" class="form-control input-lg"
+                               placeholder="LastName" required="true"/>
+                    </div>
 
+                    <div class="form-group">
+                        <input type="text" name="username" id="username" class="form-control input-lg"
+                               placeholder="UserName" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" id="password" class="form-control input-lg"
+                               placeholder="Password" required="true"/>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Register"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        </div>
+                    </div>
+                </fieldset>
             </form>
         </div>
     </div>
 
-{{>layout/footer}}
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

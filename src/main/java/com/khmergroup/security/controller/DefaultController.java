@@ -2,6 +2,7 @@ package com.khmergroup.security.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created by ravuthz on 7/6/17.
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DefaultController {
 
-    @GetMapping(value={"/", "/home"})
+    @RequestMapping(value = {"", "/", "/home"})
     public String home() {
         return "/home";
     }
@@ -28,11 +29,6 @@ public class DefaultController {
     @GetMapping("/about")
     public String about() {
         return "/about";
-    }
-
-    @GetMapping("/login2")
-    public String login() {
-        return "/login2";
     }
 
     @GetMapping("/403")
