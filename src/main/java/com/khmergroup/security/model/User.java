@@ -7,7 +7,7 @@ package com.khmergroup.security.model;
  * Email : ravuthz@gmail.com
  */
 
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -15,17 +15,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
-    //    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+public class User implements Serializable {
+    private static final long serialVersionUID = -3009157732242241606L;
     @Id
+    @Column(name = "user_id")
     @GenericGenerator(
             name = "userSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
@@ -36,8 +34,7 @@ public class User {
             }
     )
     @GeneratedValue(generator = "userSequenceGenerator")
-    @Column(name = "user_id")
-    private int id;
+    private long id;
 
     @Column(name = "email")
     @Email(message = "*Please provide a valid Email")
@@ -65,11 +62,11 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -121,4 +118,16 @@ public class User {
         this.roles = roles;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", active=" + active +
+                ", roles=" + roles +
+                '}';
+    }
 }

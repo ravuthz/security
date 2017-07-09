@@ -1,5 +1,17 @@
 spring:
-    profiles.active: development
+    application:
+        name: 'Spring Security'
+    profiles:
+        active: development
+
+    data:
+        rest:
+            base-path: /api
+            max-page-size: 20
+            page-param-name: page
+            sort-param-name: sort
+            limit-param-name: size
+
 
 ---
 # development profile
@@ -18,16 +30,16 @@ spring:
 #        username: sa
         testWhileIdle: true
         validationQuery: SELECT 1
-    jpa:
-        generate-ddl: true
-        hibernate:
-            ddl-auto: update
-            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.PostgreSQL94Dialect
-#                dialect: org.hibernate.dialect.H2Dialect
-        show-sql: true
+#    jpa:
+#        generate-ddl: true
+#        hibernate:
+#            ddl-auto: update
+#            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+#        properties:
+#            hibernate:
+#                dialect: org.hibernate.dialect.PostgreSQL94Dialect
+##                dialect: org.hibernate.dialect.H2Dialect
+#            show-sql: true
     queries:
         roles-query: select u.email, r.role from users u inner join user_role ur on(u.user_id=ur.user_id) inner join roles r on(ur.role_id=r.role_id) where u.email=?
         users-query: select email, password, active from users u where email=?
@@ -35,6 +47,11 @@ spring:
     thymeleaf:
         cache: false
         charset: UTF-8
+
+    #SECURITY (SecuriyProperties)
+    user:
+        name: user1
+        password: user1
 
 logging:
     file: logs/development.log
@@ -55,7 +72,12 @@ logging:
             apache:
                 commons:
                     dbcp2: INFO
-        com.khmergroup.security.controller: INFO
+        com:
+            khmergroup:
+                security:
+                    controller: INFO
+                    service: DEBUG
+
 server:
     port: 8080
 

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -23,8 +24,8 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //    @Autowired
 //    private AccessDeniedHandler accessDeniedHandler;
@@ -45,8 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 jdbcAuthentication()
                 .usersByUsernameQuery(usersQuery)
                 .authoritiesByUsernameQuery(rolesQuery)
-                .dataSource(dataSource);
-//                .passwordEncoder(bCryptPasswordEncoder);
+                .dataSource(dataSource)
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
     // roles admin allow to access /admin/**
@@ -80,7 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests()
                     .antMatchers("/", "/home", "/about").permitAll()
-                    .antMatchers("/login").permitAll()
+                    .antMatchers("/login", "/api/**").permitAll()
                     .antMatchers("/webjars/**").permitAll()
                     .antMatchers("/register").permitAll()
                     .antMatchers("/user/**").hasAuthority("USER")
